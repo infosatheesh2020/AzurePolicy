@@ -1,0 +1,71 @@
+{
+    "mode": "All",
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Web/sites"
+          },
+          {
+            "field": "kind",
+            "like": "app*"
+          },
+          {
+            "field": "Microsoft.Web/sites/httpsOnly",
+            "equals": "false"
+          }
+        ]
+      },
+      "then": {
+        "effect": "deployIfNotExists",
+        "details": {
+            "type": "Microsoft.Web/sites",
+            "name": "httpsOnly",
+            "roleDefinitionIds": [
+                "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+            ],
+            "deployment": {
+                "properties": {
+                    "mode": "incremental",
+                    "template": {
+                        "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                        "contentVersion": "1.0.0.0",
+                        "parameters": {
+                            "appName": {
+                                "type": "string"
+                            },
+                            "appLocation": {
+                                "type": "string"
+                            }
+                        },
+                        "variables": {},
+                        "resources": [
+
+                            {
+                                "type": "Microsoft.Web/sites",
+                                "apiVersion": "2018-11-01",
+                                "name": "[parameters('appName')]",
+                                "location": "[parameters('appLocation')]",
+                                "kind": "app,linux",
+                                "properties": {
+                                    "enabled": true,
+                                    "httpsOnly": true
+                                }
+                            }
+                        ]
+                    },
+                    "parameters": {
+                        "appName": {
+                            "value": "[field('name')]"
+                        },
+                        "appLocation": {
+                            "value": "[field('location')]"
+                        }
+                    }
+                }
+            }
+        }
+      }
+    }
+}
