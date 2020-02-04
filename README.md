@@ -1,0 +1,2 @@
+# AzurePolicy
+Azure Policy collection
