@@ -26,10 +26,10 @@
                             "appLocation": {
                                 "type": "string"
                             },
-                            "existingWorkspaceID": {
+                            "existingWorkspaceName": {
                                 "type": "string",
                                 "metadata": {
-                                    "description": "The ID of an existing Log Analytics Workspace"
+                                    "description": "The Name of an existing Log Analytics Workspace"
                                 }
                             },
                             "existingWorkspaceResourceGroup": {
@@ -53,7 +53,7 @@
                                 "apiVersion": "2017-05-01-preview",
                                 "properties": {
                                     "name": "To my Logger",
-                                    "workspaceId": "[concat('/subscriptions/', parameters('existingWorkspaceSubscriptionID'), '/resourcegroups/',parameters('existingWorkspaceResourceGroup'),'/providers/microsoft.operationalinsights/workspaces/',parameters('existingWorkspaceID'))]",
+                                    "workspaceId": "[concat('/subscriptions/', parameters('existingWorkspaceSubscriptionID'), '/resourcegroups/',parameters('existingWorkspaceResourceGroup'),'/providers/microsoft.operationalinsights/workspaces/',parameters('existingWorkspaceName'))]",
                                     "logs": [
                                         {
                                             "category": "AppServiceHTTPLogs",
@@ -124,8 +124,8 @@
                         "existingWorkspaceResourceGroup": {
                             "value":"[parameters('existingWorkspaceResourceGroup')]"
                         },
-                        "existingWorkspaceID": {
-                            "value":"[parameters('existingWorkspaceID')]"
+                        "existingWorkspaceName": {
+                            "value":"[parameters('existingWorkspaceName')]"
                         }
                     }
                 }
@@ -146,7 +146,7 @@
                 "description": "The name of an existing Resource Group which has Log Analytics Workspace."
             }
         },
-        "existingWorkspaceID": {
+        "existingWorkspaceName": {
             "type": "String",
             "metadata": {
                 "description": "The name of an existing Log Analytics Workspace."
