@@ -1,0 +1,156 @@
+{
+    "mode": "All",
+    "policyRule": {
+      "if": {
+          "field": "type",
+          "equals": "Microsoft.Web/sites"
+      },
+      "then": {
+        "effect": "deployIfNotExists",
+        "details": {
+            "type": "microsoft.web/sites/providers/diagnosticSettings",
+            "name": "diagnosticSettings",
+            "roleDefinitionIds": [
+                "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+            ],
+            "deployment": {
+                "properties": {
+                    "mode": "incremental",
+                    "template": {
+                        "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                        "contentVersion": "1.0.0.0",
+                        "parameters": {
+                            "appName": {
+                                "type": "string"
+                            },
+                            "appLocation": {
+                                "type": "string"
+                            },
+                            "existingWorkspaceID": {
+                                "type": "string",
+                                "metadata": {
+                                    "description": "The ID of an existing Log Analytics Workspace"
+                                }
+                            },
+                            "existingWorkspaceResourceGroup": {
+                                "type": "string",
+                                "metadata": {
+                                    "description": "The resource group for the existing Log Analytics Workspace"
+                                }
+                            },
+                            "existingWorkspaceSubscriptionID": {
+                                "type": "string",
+                                "metadata": {
+                                    "description": "The Azure Subscription ID for the existing Log Analytics Workspace"
+                                }
+                            }
+                        },
+                        "variables": {},
+                        "resources": [
+                            {
+                                "type": "microsoft.web/sites/providers/diagnosticSettings",
+                                "name": "[concat(parameters('appName'),'/microsoft.insights/logging')]",
+                                "apiVersion": "2017-05-01-preview",
+                                "properties": {
+                                    "name": "To my Logger",
+                                    "workspaceId": "[concat('/subscriptions/', parameters('existingWorkspaceSubscriptionID'), '/resourcegroups/',parameters('existingWorkspaceResourceGroup'),'/providers/microsoft.operationalinsights/workspaces/',parameters('existingWorkspaceID'))]",
+                                    "logs": [
+                                        {
+                                            "category": "AppServiceHTTPLogs",
+                                            "enabled": true,
+                                            "retentionPolicy": {
+                                                "enabled": false,
+                                                "days": 0
+                                            }
+                                        },
+                                        {
+                                            "category": "AppServiceConsoleLogs",
+                                            "enabled": true,
+                                            "retentionPolicy": {
+                                                "enabled": false,
+                                                "days": 0
+                                            }
+                                        },
+                                        {
+                                            "category": "AppServiceAppLogs",
+                                            "enabled": true,
+                                            "retentionPolicy": {
+                                                "enabled": false,
+                                                "days": 0
+                                            }
+                                        },
+                                        {
+                                            "category": "AppServiceFileAuditLogs",
+                                            "enabled": true,
+                                            "retentionPolicy": {
+                                                "enabled": false,
+                                                "days": 0
+                                            }
+                                        },
+                                        {
+                                            "category": "AppServiceAuditLogs",
+                                            "enabled": true,
+                                            "retentionPolicy": {
+                                                "enabled": false,
+                                                "days": 0
+                                            }
+                                        }
+                                    ],
+                                    "metrics": [
+                                        {
+                                            "timeGrain": "PT1M",
+                                            "category": "AllMetrics",
+                                            "enabled": true,
+                                            "retentionPolicy": {
+                                                "enabled": false,
+                                                "days": 0
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "parameters": {
+                        "appName": {
+                            "value": "[field('name')]"
+                        },
+                        "appLocation": {
+                            "value": "[field('location')]"
+                        },
+                        "existingWorkspaceSubscriptionID": {
+                            "value":"[parameters('existingWorkspaceSubscriptionID')]"
+                        },
+                        "existingWorkspaceResourceGroup": {
+                            "value":"[parameters('existingWorkspaceResourceGroup')]"
+                        },
+                        "existingWorkspaceID": {
+                            "value":"[parameters('existingWorkspaceID')]"
+                        }
+                    }
+                }
+            }
+        }
+      }
+    },
+    "parameters": {
+        "existingWorkspaceSubscriptionID": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of an existing Azure Subscription which has Log Analytics Workspace."
+            }
+        },
+        "existingWorkspaceResourceGroup": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of an existing Resource Group which has Log Analytics Workspace."
+            }
+        },
+        "existingWorkspaceID": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of an existing Log Analytics Workspace."
+            }
+        }
+      }
+}
