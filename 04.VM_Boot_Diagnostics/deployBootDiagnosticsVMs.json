@@ -1,0 +1,84 @@
+{
+  "mode": "All",
+    "policyRule": {
+    "if": {
+      "field": "type",
+      "equals": "Microsoft.Compute/virtualMachines"
+    },
+    "then": {
+      "effect": "deployIfNotExists",
+      "details": {
+        "type": "Microsoft.Compute/virtualMachines",
+        "name": "[field('name')]",
+        "roleDefinitionIds": [
+          "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+        ],
+        "existenceCondition": {
+          "allOf": [
+            {
+              "field": "Microsoft.Compute/virtualMachines/diagnosticsProfile",
+              "exists": "true"
+            },
+            {
+              "field": "Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.enabled",
+              "equals": "true"
+            }
+          ]
+        },
+        "deployment": {
+          "properties": {
+            "mode": "incremental",
+            "parameters": {
+              "vmName": {
+                "value": "[field('name')]"
+              },
+              "vmLocation": {
+                "value": "[field('location')]"
+              },
+              "storageAccountName":{
+                "value":"[parameters('storageAccountName')]"
+              }
+            },
+            "template": {
+              "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+              "contentVersion": "1.0.0.0",
+              "parameters": {
+                "vmName": {
+                  "type": "string"
+                },
+                "vmLocation": {
+                  "type": "string"
+                },
+                "storageAccountName":{
+                  "type":"string"
+                }
+              },
+              "resources": [
+                {
+                  "name": "[parameters('vmName')]",
+                  "type": "Microsoft.Compute/virtualMachines",
+                  "apiVersion": "2019-07-01",
+                  "location": "[parameters('vmLocation')]",
+                  "properties": {
+                    "diagnosticsProfile": {
+                      "bootDiagnostics": {
+                        "enabled": "true",
+                        "storageUri":"[concat('https://',parameters('storageAccountName'),'.blob.core.windows.net/')]"
+                      }
+                    }
+                  },
+                  "resources": []
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "storageAccountName":{
+      "type":"String"
+    }
+  }
+}
