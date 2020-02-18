@@ -25,3 +25,10 @@ Remediates the App Service by enabling diagnostics settings and send to the spec
 
 - "displayName": "deployIfNotExists - Enable diagnostic settings for App Service",
 - "description": "Enable diagnostic settings for App Service and send to existing Log Analytics workspace",
+
+## 04.VM_Boot_Diagnostics_Remediate
+
+Remediates the Windows & Linux VM by enabling boot diagnostics settings and send to the specified storage account
+
+- "displayName": "deployIfNotExists - Enable Boot diagnostic settings for VM",
+- "description": "Enable diagnostic settings for Windows & Linux VM and send to existing storage account",
