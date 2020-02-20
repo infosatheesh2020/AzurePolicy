@@ -47,7 +47,6 @@
                                 "apiVersion": "2018-11-01",
                                 "name": "[parameters('appName')]",
                                 "location": "[parameters('appLocation')]",
-                                "kind": "app,linux",
                                 "properties": {
                                     "enabled": true,
                                     "httpsOnly": true
