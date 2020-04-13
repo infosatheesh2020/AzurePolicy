@@ -1,0 +1,140 @@
+{
+    "mode": "All",
+    "policyRule": {
+      "if": {
+          "field": "type",
+          "equals": "Microsoft.Network/applicationGateways"
+      },
+      "then": {
+        "effect": "deployIfNotExists",
+        "details": {
+            "type": "Microsoft.Network/applicationGateways/providers/diagnosticSettings",
+            "name": "diagnosticSettings",
+            "roleDefinitionIds": [
+                "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+            ],
+            "deployment": {
+                "properties": {
+                    "mode": "incremental",
+                    "template": {
+                        "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                        "contentVersion": "1.0.0.0",
+                        "parameters": {
+                            "appGWName": {
+                                "type": "string"
+                            },
+                            "appGWLocation": {
+                                "type": "string"
+                            },
+                            "existingWorkspaceName": {
+                                "type": "string",
+                                "metadata": {
+                                    "description": "The Name of an existing Log Analytics Workspace"
+                                }
+                            },
+                            "existingWorkspaceResourceGroup": {
+                                "type": "string",
+                                "metadata": {
+                                    "description": "The resource group for the existing Log Analytics Workspace"
+                                }
+                            },
+                            "existingWorkspaceSubscriptionID": {
+                                "type": "string",
+                                "metadata": {
+                                    "description": "The Azure Subscription ID for the existing Log Analytics Workspace"
+                                }
+                            }
+                        },
+                        "variables": {},
+                        "resources": [
+                            {
+                                "type": "Microsoft.Network/applicationGateways/providers/diagnosticSettings",
+                                "name": "[concat(parameters('appGWName'),'/microsoft.insights/logging')]",
+                                "apiVersion": "2017-05-01-preview",
+                                "properties": {
+                                    "name": "To my Logger",
+                                    "workspaceId": "[concat('/subscriptions/', parameters('existingWorkspaceSubscriptionID'), '/resourcegroups/',parameters('existingWorkspaceResourceGroup'),'/providers/microsoft.operationalinsights/workspaces/',parameters('existingWorkspaceName'))]",
+                                    "logs": [
+                                        {
+                                            "category": "ApplicationGatewayAccessLog",
+                                            "enabled": true,
+                                            "retentionPolicy": {
+                                                "enabled": false,
+                                                "days": 0
+                                            }
+                                        },
+                                        {
+                                            "category": "ApplicationGatewayPerformanceLog",
+                                            "enabled": true,
+                                            "retentionPolicy": {
+                                                "enabled": false,
+                                                "days": 0
+                                            }
+                                        },
+                                        {
+                                            "category": "ApplicationGatewayFirewallLog",
+                                            "enabled": true,
+                                            "retentionPolicy": {
+                                                "enabled": false,
+                                                "days": 0
+                                            }
+                                        }
+                                    ],
+                                    "metrics": [
+                                        {
+                                            "timeGrain": "PT1M",
+                                            "category": "AllMetrics",
+                                            "enabled": true,
+                                            "retentionPolicy": {
+                                                "enabled": false,
+                                                "days": 0
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "parameters": {
+                        "appGWName": {
+                            "value": "[field('name')]"
+                        },
+                        "appGWLocation": {
+                            "value": "[field('location')]"
+                        },
+                        "existingWorkspaceSubscriptionID": {
+                            "value":"[parameters('existingWorkspaceSubscriptionID')]"
+                        },
+                        "existingWorkspaceResourceGroup": {
+                            "value":"[parameters('existingWorkspaceResourceGroup')]"
+                        },
+                        "existingWorkspaceName": {
+                            "value":"[parameters('existingWorkspaceName')]"
+                        }
+                    }
+                }
+            }
+        }
+      }
+    },
+    "parameters": {
+        "existingWorkspaceSubscriptionID": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of an existing Azure Subscription which has Log Analytics Workspace."
+            }
+        },
+        "existingWorkspaceResourceGroup": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of an existing Resource Group which has Log Analytics Workspace."
+            }
+        },
+        "existingWorkspaceName": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of an existing Log Analytics Workspace."
+            }
+        }
+      }
+}

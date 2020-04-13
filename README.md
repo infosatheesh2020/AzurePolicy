@@ -32,3 +32,10 @@ Remediates the Windows & Linux VM by enabling boot diagnostics settings and send
 
 - "displayName": "deployIfNotExists - Enable Boot diagnostic settings for VM",
 - "description": "Enable diagnostic settings for Windows & Linux VM and send to existing storage account",
+
+## 05.AppGateway_WAF_Diagnostics_Remediate
+
+Remediates the AppGateway with WAF by enabling boot diagnostics settings and send AppGW & WAF logs along with metrics to Log Analytics workspace
+
+- "displayName": "deployIfNotExists - AppGW and WAF diagnostics",
+- "description": "Enable diagnostic settings for AppGW and send AppGW/WAF logs & Metrics to existing Log Analytics workspace",
