@@ -42,7 +42,7 @@ Remediates the AppGateway with WAF by enabling boot diagnostics settings and sen
 
 ## 06.NSG_FlowLogs_Enable_Remediate
 
-Remediates the NSG by enabling NSG flow logs if not already enabled, and send the logs to the configured storage account. It looks for flowlogs within the networkWatcherRG resource group. It also checks that the name of the flowlog matches the format that the portal uses by default. This is because we need to pass the name of the flowlog for policy to be able to get the results.
+Remediates the NSG by enabling NSG flow logs if not already enabled, and send the logs to the configured storage account. It looks for flowlogs within the networkWatcherRG resource group. It also checks that the name of the flowlog matches the format that the portal uses by default. This is because we need to pass the name of the flowlog for policy to be able to get the results. It also enables flow log analytics by sending logs to Log Analytics.
 
 - "displayName": "deployIfNotExists - NSG Flow Logs Enable",
-- "description": "Enable NSG Flow logs and sends the log data to Azure Storage account configured during policy assignment",
+- "description": "Enable NSG Flow logs and sends the log data to Azure Storage account and Log Analytics configured during policy assignment",

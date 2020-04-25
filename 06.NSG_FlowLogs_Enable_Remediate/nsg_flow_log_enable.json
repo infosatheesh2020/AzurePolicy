@@ -40,6 +40,9 @@
                                 "storageId": {
                                     "type": "String"
                                 },
+                                "workspaceResourceId": {
+                                    "type": "String"
+                                },
                                 "nsgName": {
                                     "type": "String"
                                 },
@@ -66,7 +69,18 @@
                                         "enabled": "true",
                                         "retentionPolicy": {
                                             "days": "0",
-                                            "enabled": "false"
+                                            "enabled": "true"
+                                        },
+                                        "format": {
+                                            "type": "JSON",
+                                            "version": 2
+                                        },
+                                        "flowAnalyticsConfiguration": {
+                                            "networkWatcherFlowAnalyticsConfiguration": {
+                                                "enabled": true,
+                                                "workspaceResourceId": "[parameters('workspaceResourceId')]",
+                                                "trafficAnalyticsInterval": 10
+                                            }
                                         }
                                     }
                                 }
@@ -75,6 +89,9 @@
                         "parameters": {
                             "storageId": {
                                 "value": "[parameters('storageId')]"
+                            },
+                            "workspaceResourceId": {
+                                "value": "[parameters('workspaceResourceId')]"
                             },
                             "nsgName": {
                                 "value": "[field('name')]"
@@ -100,6 +117,13 @@
             "metadata": {
                 "displayName": "Storage id",
                 "description": "A string with the storage id for the flowlogs to be sent to. The format must be: '/subscriptions/{subscription id}/resourceGroups/{resourceGroup name}/providers/Microsoft.Storage/storageAccounts/{storage account name}"
+            }
+        },
+        "workspaceResourceId": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Log Analytics workspace resource id",
+                "description": "A string with the Log Analytics workspace resource id for the flowlogs analytics to be sent to. The format must be: '/subscriptions/{subscription id}/resourceGroups/{resourceGroup name}/providers/Microsoft.OperationalInsights/workspaces/{workspace name}' "
             }
         }
     }
