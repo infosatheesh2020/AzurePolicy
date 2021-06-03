@@ -1,0 +1,35 @@
+{
+  "properties": {
+    "displayName": "Allowed Tags",
+    "description": "This policy enables you to restrict the tags and values your organization can specify when deploying resources. Use to enforce your environment and SLA based tagging requirements.",
+    "metadata": {
+      "version": "1.0.0",
+      "category": "General"
+    },
+    "parameters": {
+      "tagName": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Tag Name",
+          "description": "Name of the tag, such as 'environment' or 'Criticality'"
+        }
+      },
+      "listOfAllowedValues": {
+        "type": "Array",
+        "metadata": {
+          "description": "The list of Tag values that can be specified when deploying resources.",
+          "displayName": "Allowed Tag Values"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+          "field": "[concat('tags[', parameters('tagName'), ']')]",
+          "notIn": "[parameters('listOfAllowedValues')]"
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  }
+}
